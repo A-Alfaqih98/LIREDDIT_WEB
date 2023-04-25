@@ -1,27 +1,22 @@
-import { ChakraProvider } from '@chakra-ui/react';
-import theme from '../theme';
-import { AppProps } from 'next/app';
-import { Client, Provider, fetchExchange } from 'urql';
-import { cacheExchange, Cache, QueryInput } from '@urql/exchange-graphcache';
+import { QueryInput, cacheExchange } from '@urql/exchange-graphcache';
+import { withUrqlClient } from 'next-urql';
+import { fetchExchange, dedupExchange } from 'urql';
+import { betterUpdateQuery } from './betterUpdateQuery';
 import {
   LoginMutation,
-  LogoutMutation,
-  MeDocument,
   MeQuery,
+  MeDocument,
+  LogoutMutation,
   RegisterMutation,
 } from '../generated/graphql';
 
-function betterUpdateQuery<Result, Query>(
-  cache: Cache,
-  qi: QueryInput,
-  result: any,
-  fn: (r: Result, q: Query) => Query,
-) {
-  return cache.updateQuery(qi, (data) => fn(result, data as any) as any);
-}
-
-const client = new Client({
+export default withUrqlClient((ssrExchange) => ({
   url: 'http://localhost:4000/graphql',
+  fetchOptions: {
+    // Include cookies in the request
+    credentials: 'include' as const,
+    cache: 'default' as const,
+  },
   exchanges: [
     cacheExchange({
       updates: {
@@ -75,23 +70,8 @@ const client = new Client({
         },
       },
     }),
+    ssrExchange,
     fetchExchange,
+    dedupExchange,
   ],
-  fetchOptions: {
-    // Include cookies in the request
-    credentials: 'include',
-    cache: 'default',
-  },
-});
-
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <Provider value={client}>
-      <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
-    </Provider>
-  );
-}
-
-export default MyApp;
+}));

@@ -24,9 +24,16 @@ const theme = extendTheme({
         default: '#FF0080',
         _dark: '#fbec8f',
       },
+      header: {
+        default: '#16161D',
+        _dark: '#ade3b8',
+      },
     },
     radii: {
       button: '12px',
+    },
+    fonts: {
+      header: `"Times New Roman", Times, serif`,
     },
   },
   colors: {

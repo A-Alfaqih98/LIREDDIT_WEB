@@ -1,7 +1,12 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from '../theme';
 import { AppProps } from 'next/app';
-import { Client, Provider, fetchExchange } from 'urql';
+import {
+  Client,
+  Provider,
+  fetchExchange,
+  cacheExchange as _cacheExchange,
+} from 'urql';
 import { cacheExchange, Cache, QueryInput } from '@urql/exchange-graphcache';
 import {
   LoginMutation,
@@ -10,6 +15,7 @@ import {
   MeQuery,
   RegisterMutation,
 } from '../generated/graphql';
+import { withUrqlClient } from 'next-urql';
 
 function betterUpdateQuery<Result, Query>(
   cache: Cache,
@@ -94,4 +100,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default withUrqlClient(
+  (_ssrExchange, ctx) => ({
+    // ...add your Client options here
+    url: 'http://localhost:4000/graphql',
+    exchanges: [_ssrExchange, fetchExchange, _cacheExchange],
+  }),
+  { ssr: false },
+)(MyApp);

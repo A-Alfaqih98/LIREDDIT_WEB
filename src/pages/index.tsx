@@ -1,28 +1,33 @@
 import { Button, Flex, Text, useColorMode, Heading } from '@chakra-ui/react';
 import { useState } from 'react';
 import { NavBar } from '../components/NavBar';
+import { usePostsQuery } from '../generated/graphql';
+import { withUrqlClient } from 'next-urql';
+import { cacheExchange, fetchExchange } from 'urql';
 
 const Index = () => {
   const { toggleColorMode } = useColorMode();
-  const [state, setState] = useState();
+  const [{ data }] = usePostsQuery();
   return (
     <>
       <NavBar />
-      <Flex
-        direction='column'
-        height={'100vh'}
-        justifyContent='center'
-        alignItems='center'
-      >
-        <Heading m={4} color='header' fontFamily='header'>
-          Hello World!
-        </Heading>
-        <Button className='_text' onClick={toggleColorMode}>
-          Toggle color mode
-        </Button>
-      </Flex>
+      <Button className='_text' onClick={toggleColorMode}>
+        Toggle color mode
+      </Button>
+      {!data ? (
+        <div>loading...</div>
+      ) : (
+        data.posts.map((post) => <div key={post.id}>{post.title}</div>)
+      )}
     </>
   );
 };
 
-export default Index;
+export default withUrqlClient(
+  (_ssrExchange, ctx) => ({
+    // ...add your Client options here
+    url: 'http://localhost:4000/graphql',
+    exchanges: [_ssrExchange, fetchExchange, cacheExchange],
+  }),
+  { ssr: true },
+)(Index);

@@ -23,11 +23,15 @@ const Index = () => {
   );
 };
 
-export default withUrqlClient(
-  (_ssrExchange, ctx) => ({
-    // ...add your Client options here
-    url: 'http://localhost:4000/graphql',
-    exchanges: [_ssrExchange, fetchExchange, cacheExchange],
-  }),
-  { ssr: true },
-)(Index);
+export default Index;
+
+// Todo: add ssr to Index page maybe with apollo
+
+// export default withUrqlClient(
+//   (_ssrExchange, ctx) => ({
+//     // ...add your Client options here
+//     url: 'http://localhost:4000/graphql',
+//     exchanges: [_ssrExchange, fetchExchange, cacheExchange],
+//   }),
+//   { ssr: true },
+// )(Index);

@@ -100,11 +100,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default withUrqlClient(
-  (_ssrExchange, ctx) => ({
-    // ...add your Client options here
-    url: 'http://localhost:4000/graphql',
-    exchanges: [_ssrExchange, fetchExchange, _cacheExchange],
-  }),
-  { ssr: false },
-)(MyApp);
+export default MyApp;
+
+// export default withUrqlClient(
+//   (_ssrExchange, ctx) => ({
+//     // ...add your Client options here
+//     url: 'http://localhost:4000/graphql',
+//     exchanges: [_ssrExchange, fetchExchange, _cacheExchange],
+//   }),
+//   { ssr: false },
+// )(MyApp);

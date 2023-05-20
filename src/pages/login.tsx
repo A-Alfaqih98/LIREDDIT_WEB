@@ -17,13 +17,13 @@ const Login: React.FC<loginProps> = ({}) => {
   return (
     <Wrapper variant='small'>
       <Formik
-        initialValues={{ username: '', password: '' }}
+        initialValues={{ usernameOrEmail: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
           const response = await login(values);
           if (response.data?.login.errors) {
             setErrors(toErrorMap(response.data?.login.errors));
           } else if (response.data?.login.user) {
-            // wrked
+            // worked
             router.push('/');
           }
           response.data?.login.user?.id;
@@ -32,9 +32,9 @@ const Login: React.FC<loginProps> = ({}) => {
         {({ isSubmitting, touched }) => (
           <Form>
             <InputField
-              name='username'
-              placeholder='username'
-              label='username'
+              name='usernameOrEmail'
+              placeholder='Username or Email'
+              label='Username or Email'
               autoFocus
               autoComplete='on'
             />

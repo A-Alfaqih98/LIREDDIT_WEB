@@ -16,7 +16,7 @@ const Register: React.FC<registerProps> = ({}) => {
   return (
     <Wrapper variant='small'>
       <Formik
-        initialValues={{ username: '', password: '' }}
+        initialValues={{ username: '', email: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
           console.log(values);
           const response = await register(values);
@@ -37,6 +37,14 @@ const Register: React.FC<registerProps> = ({}) => {
               label='username'
               autoFocus
             />
+            <Box mt={4}>
+              <InputField
+                name='email'
+                placeholder='email'
+                label='email'
+                type='email'
+              />
+            </Box>
             <Box mt={4}>
               <InputField
                 name='password'

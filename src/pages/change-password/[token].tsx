@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
-import { Box, Button, FormErrorMessage } from '@chakra-ui/react';
+import { Box, Button, FormErrorMessage, Link } from '@chakra-ui/react';
 import { Formik, Form } from 'formik';
 import router from 'next/router';
 import { InputField } from '../../components/InputField';
@@ -8,8 +8,6 @@ import { Wrapper } from '../../components/Wrapper';
 import { toErrorMap } from '../../utils/toErrorMap';
 
 import { useChangePasswordMutation } from '../../generated/graphql';
-import { withUrqlClient } from 'next-urql';
-import createUrqlClient from '../../utils/createUrqlClient';
 
 export const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
   const [, changePassword] = useChangePasswordMutation();
@@ -44,7 +42,12 @@ export const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
               autoFocus
               autoComplete='on'
             />
-            <Box color={'red'}>{tokenError}</Box>
+            <Box mt={2} color={'red'}>
+              {tokenError}
+            </Box>
+            <Box mt={2}>
+              <Link href='/forgot-password'>[orgot password page</Link>
+            </Box>
             <Button mt={4} type='submit' color='teal' isLoading={isSubmitting}>
               Change Password
             </Button>

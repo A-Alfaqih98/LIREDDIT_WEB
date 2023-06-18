@@ -1,6 +1,13 @@
 import React from 'react';
 import { Field, Form, Formik } from 'formik';
-import { Box, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Link,
+} from '@chakra-ui/react';
 import { Wrapper } from '../components/Wrapper';
 import { InputField } from '../components/InputField';
 import { fetchExchange, useMutation } from 'urql';
@@ -15,7 +22,7 @@ const Login: React.FC<loginProps> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
   return (
-    <Wrapper variant='small'>
+    <Wrapper variant="small">
       <Formik
         initialValues={{ usernameOrEmail: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
@@ -24,7 +31,7 @@ const Login: React.FC<loginProps> = ({}) => {
             setErrors(toErrorMap(response.data?.login.errors));
           } else if (response.data?.login.user) {
             // worked
-            router.push('/');
+            router.replace('/?next=register');
           }
           response.data?.login.user?.id;
         }}
@@ -32,22 +39,25 @@ const Login: React.FC<loginProps> = ({}) => {
         {({ isSubmitting, touched }) => (
           <Form>
             <InputField
-              name='usernameOrEmail'
-              placeholder='Username or Email'
-              label='Username or Email'
+              name="usernameOrEmail"
+              placeholder="Username or Email"
+              label="Username or Email"
               autoFocus
-              autoComplete='on'
+              autoComplete="on"
             />
             <Box mt={4}>
               <InputField
-                name='password'
-                placeholder='password'
-                label='password'
-                type='password'
-                autoComplete='on'
+                name="password"
+                placeholder="password"
+                label="Password"
+                type="password"
+                autoComplete="on"
               />
             </Box>
-            <Button mt={4} type='submit' color='teal' isLoading={isSubmitting}>
+            <Box mt={1} justifyContent={'end'} display={'flex'}>
+              <Link href="/forgot-password">Forgot password?</Link>
+            </Box>
+            <Button mt={4} type="submit" color="teal" isLoading={isSubmitting}>
               Login
             </Button>
           </Form>
